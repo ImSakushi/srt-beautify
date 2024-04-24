@@ -50,16 +50,24 @@ This project provides an automated solution for converting SRT subtitle files in
 
 - To process a video with a specific SRT file:
   ```bash
-  python srt_ass.py path/to/video.mkv path/to/subtitle.srt -l eng
+  python srt_ass.py path/to/video.mkv -s path/to/subtitle.srt -l eng
   ```
 
 - To process an MKV video by extracting the subtitles:
   ```bash
   python srt_ass.py path/to/video.mkv -l fra
   ```
+
+- To batch process a whole folder of MKV video by extracting the subtitles:
+  ```bash
+  python srt_ass.py -b path/to/folder -l spa
+  ```
 ### Options
 ```text
 -l, --language                                   Destination language
+-s, --subtitle                                   For using custom .srt file
+-s, --subtitle                                   For using custom .srt file
+-b, --batch                                      To use a whole folder instead of a single file
 {fre, ang, spa, ger, ita, por, rus, jpn, kor, chi, ara}
 ```
 
