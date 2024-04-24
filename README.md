@@ -1,55 +1,65 @@
-
 # SRT Beautify
 
-Ce projet offre une solution automatisée pour convertir les fichiers de sous-titres SRT en ASS, en appliquant un style spécifique (celui de Wakanim pour l'instant), et pour les fusionner avec des fichiers vidéo MKV/MP4. Le traitement peut être effectué via un script Python en ligne de commande ou une interface graphique utilisateur (GUI) basée sur Tkinter pour une interaction plus conviviale.
+This project provides an automated solution for converting SRT subtitle files into ASS format with a specified style, and for merging them with MKV/MP4 video files. Processing can be done via a Python command-line script or a user-friendly graphical interface (GUI) based on Tkinter.
 
-## Fonctionnalités
+## Table of Contents
+1. [Features](#features)
+2. [Prerequisites](#prerequisites)
+3. [Installation](#installation)
+4. [Usage](#usage)
+   - [Command Line Script](#command-line-script)
+   - [Graphical Interface](#graphical-interface)
 
-- **Conversion de SRT en ASS** : Convertit les fichiers de sous-titres SRT en format ASS avec un style prédéfini.
-- **Fusion de sous-titres** : Ajoute la piste de sous-titres ASS modifiée aux fichiers vidéo MKV/MP4 en supprimant les pistes de sous-titres existantes.
-- **Prise en charge multiple** : Traite plusieurs fichiers vidéo simultanément lors de l'utilisation de l'interface graphique.
-- **Extraction automatique de sous-titres** : Pour les fichiers MKV, extrait automatiquement les sous-titres existants avant la conversion et la fusion.
+## Features {#features}
 
-## Prérequis
+- **SRT to ASS Conversion**: Converts SRT subtitle files into the ASS format with a predefined style.
+- **Subtitle Merging**: Adds the modified ASS subtitle track to MKV/MP4 video files, removing existing subtitle tracks.
+- **Multiple File Support**: Processes multiple video files simultaneously when using the graphical interface.
+- **Automatic Subtitle Extraction**: For MKV files, automatically extracts existing subtitles before conversion and merging.
 
-- Python 3.6 ou supérieur
-- FFmpeg installé et accessible depuis le PATH de votre système
-- Bibliothèques Python : `tkinter` pour l'interface graphique, `subprocess` pour l'exécution de commandes système
+## Prerequisites {#prerequisites}
 
-## Installation
+- Python 3.6 or higher
+- FFmpeg installed and accessible from your system's PATH
+- Python libraries: `tkinter` for the GUI, `subprocess` for executing system commands
 
-1. **Cloner le dépôt** :
+## Installation {#installation}
+
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/ImSakushi/srt_beautify.git
    cd srt_beautify
    ```
 
-2. **Installer FFmpeg** :
-   - **Windows** : Téléchargez et installez depuis [FFmpeg.org](https://ffmpeg.org/download.html), et ajoutez le dossier `bin` à votre variable d'environnement PATH.
-   - **Linux** : Exécutez `sudo apt-get install ffmpeg` (pour les distributions basées sur Debian).
+2. **Install FFmpeg**:
+   - **Windows**: Download and install from [FFmpeg.org](https://ffmpeg.org/download.html), and add the `bin` folder to your PATH environment variable.
+   - **Linux**: Run `sudo apt-get install ffmpeg` (for Debian-based distributions).
 
-3. **Assurez-vous que Python est installé** :
-   - Vérifiez avec `python --version` ou `python3 --version`.
+3. **Ensure Python is installed**:
+   - Check with `python --version` or `python3 --version`.
 
-## Utilisation
+## Usage {#usage}
 
-### Script en Ligne de Commande
+### Command Line Script {#command-line-script}
 
-- Pour traiter une vidéo avec un fichier SRT spécifique :
+- To process a video with a specific SRT file:
   ```bash
-  python srtass.py chemin/vers/la/video.mkv chemin/vers/le/sous-titre.srt
+  python srtass.py path/to/video.mkv path/to/subtitle.srt
   ```
 
-- Pour traiter une vidéo MKV en extrayant les sous-titres :
+- To process an MKV video by extracting the subtitles:
   ```bash
-  python srtass.py chemin/vers/le/video.mkv
+  python srtass.py path/to/video.mkv
   ```
 
-### Interface Graphique
+### Graphical Interface {#graphical-interface}
 
-- Lancez l'interface graphique :
+- Launch the graphical interface:
   ```bash
   python gui.py
   ```
 
-- Suivez les instructions à l'écran pour sélectionner les vidéos et le fichier SRT, puis cliquez sur "Process Videos" pour démarrer le traitement.
+- Follow the on-screen instructions to select videos and the SRT file, then click "Process Videos" to start processing.
+```
+
+With these modifications, users can now easily navigate your README by clicking on the sections listed in the table of contents. Each link will take them directly to the corresponding section in the document.
