@@ -132,38 +132,53 @@ def clean_up_files(*files_to_remove):
         os.remove(file_path)
         print(f"Removed temporary file: {file_path}")
 
-def parse_arguments():
-    parser = argparse.ArgumentParser(description="Process video and subtitle files.")
-    parser.add_argument("video_file", help="Input video file (MKV or MP4).")
-    parser.add_argument("subtitle_file", nargs='?', help="Input subtitle file (SRT).", default="")
-    parser.add_argument("-l", "--language", help="Subtitle language code (default 'fre').", default="fre")
-    return parser.parse_args()
-
-if __name__ == "__main__":
-    args = parse_arguments()
-    input_video = args.video_file
-    input_srt = args.subtitle_file
-    language_code = args.language
-
-    file_extension = os.path.splitext(input_video)[1].lower()
-    file_root = os.path.splitext(input_video)[0]
+def process_video(input_video, input_srt, language_code, file_root):
     output_video = f"{file_root}_fixed.mkv"
     output_ass = "temp_output.ass"
     interim_video = "no_subtitles.mkv"
 
     if input_srt:
         srt_to_ass(input_srt, output_ass)
-    elif file_extension == ".mkv":
+    else:
         extracted_srt = "extracted.srt"
         extract_subtitle(input_video, extracted_srt, language_code)
         srt_to_ass(extracted_srt, output_ass)
         clean_up_files(extracted_srt)
-    else:
-        print("SRT file required for MP4 input or non-MKV files.")
-        sys.exit(1)
 
     remove_existing_subtitles(input_video, interim_video)
     add_new_subtitle(interim_video, output_ass, output_video, language_code)
     clean_up_files(output_ass, interim_video)
 
-    print(f"Final output video saved as: {output_video}")
+    print(f"Processed {input_video}, final output saved as: {output_video}")
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Process video and subtitle files.")
+    parser.add_argument("input", help="Input video file or directory for batch processing.")
+    parser.add_argument("-s", "--subtitle", help="Input subtitle file (SRT).", default="")
+    parser.add_argument("-l", "--language", help="Subtitle language code (default 'fre').", default="fre")
+    parser.add_argument("-b", "--batch", action="store_true", help="Batch process all MKV files in the specified directory")
+    return parser.parse_args()
+
+if __name__ == "__main__":
+    args = parse_arguments()
+
+    if args.batch:
+        if not os.path.isdir(args.input):
+            print("Specified input is not a directory. Please provide a directory when using the --batch option.")
+            sys.exit(1)
+        for filename in os.listdir(args.input):
+            if filename.lower().endswith(".mkv"):
+                input_video = os.path.join(args.input, filename)
+                file_root = os.path.splitext(input_video)[0]
+                process_video(input_video, args.subtitle, args.language, file_root)
+    else:
+        if not os.path.isfile(args.input):
+            print("Specified input is not a file. Please provide a valid video file.")
+            sys.exit(1)
+        input_video = args.input
+        file_extension = os.path.splitext(input_video)[1].lower()
+        file_root = os.path.splitext(input_video)[0]
+        if file_extension != ".mkv":
+            print("Only MKV files are supported without batch processing.")
+            sys.exit(1)
+        process_video(input_video, args.subtitle, args.language, file_root)
