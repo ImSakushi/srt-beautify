@@ -1,24 +1,48 @@
 import re
 import sys
+import argparse
 import subprocess
 import os
 
-def extract_subtitles(video_path, output_srt):
+def extract_subtitle(video_path, output_srt, language_code):
     try:
-        # Commande FFmpeg pour extraire les sous-titres français, ou les premiers disponibles
-        command = [
-            'ffmpeg',
-            '-i', video_path,
-            '-map', '0:s:m:language:fre',
-            '-c:s', 'srt',
-            '-f', 'srt',
-            output_srt
+        # Use ffprobe to find the first subtitle stream of the specified language
+        probe_command = [
+            'ffprobe',
+            '-v', 'error',
+            '-select_streams', 's',
+            '-show_entries', 'stream=index:stream_tags=language',
+            '-of', 'csv=p=0'
         ]
-        subprocess.run(command, check=True)
-    except subprocess.CalledProcessError:
-        print("Trying to extract any available subtitles.")
-        command[4] = '0:s:0'  # Sélectionne la première piste de sous-titre disponible
-        subprocess.run(command, check=True)
+        probe_result = subprocess.run(probe_command + [video_path], text=True, capture_output=True, check=True)
+        # Parse the output to find the first stream with the desired language
+        first_stream_index = None
+        for line in probe_result.stdout.splitlines():
+            index, lang = line.split(',')  # Assuming the format is "index,language"
+            if lang.strip() == language_code:
+                first_stream_index = int(index)  # Convert index to an integer
+                final_language = first_stream_index - 2
+                break
+
+
+        if first_stream_index is not None:
+            # Extract only the first matching subtitle stream
+            extract_command = [
+                'ffmpeg',
+                '-i', video_path,
+                '-map', f'0:s:{final_language}',
+                '-c:s', 'srt',
+                '-f', 'srt',
+                output_srt
+            ]
+            subprocess.run(extract_command, check=True)
+            print(f"Extracted subtitles from stream index {first_stream_index} with language {language_code}.")
+        else:
+            print("No matching subtitle streams found for the specified language.")
+    except subprocess.CalledProcessError as e:
+        print("Failed to extract subtitles:", str(e))
+
+
 
 def srt_to_ass(srt_file_path, ass_file_path):
     header = """[Script Info]
@@ -87,7 +111,7 @@ def remove_existing_subtitles(video_path, interim_output_path):
     except subprocess.CalledProcessError as e:
         print("Failed to remove existing subtitles:", e)
 
-def add_new_subtitle(interim_output_path, subtitle_path, final_output_path):
+def add_new_subtitle(interim_output_path, subtitle_path, final_output_path, language_code):
     try:
         command = [
             'ffmpeg',
@@ -96,6 +120,7 @@ def add_new_subtitle(interim_output_path, subtitle_path, final_output_path):
             '-map', '0',
             '-map', '1:0',
             '-c', 'copy',
+            '-metadata:s:s:0', f'language={language_code}',
             final_output_path
         ]
         subprocess.run(command, check=True)
@@ -107,24 +132,30 @@ def clean_up_files(*files_to_remove):
         os.remove(file_path)
         print(f"Removed temporary file: {file_path}")
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python script.py video_file.mkv [subtitle_file.srt]")
-        sys.exit(1)
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Process video and subtitle files.")
+    parser.add_argument("video_file", help="Input video file (MKV or MP4).")
+    parser.add_argument("subtitle_file", nargs='?', help="Input subtitle file (SRT).", default="")
+    parser.add_argument("-l", "--language", help="Subtitle language code (default 'fre').", default="fre")
+    return parser.parse_args()
 
-    input_video = sys.argv[1]
+if __name__ == "__main__":
+    args = parse_arguments()
+    input_video = args.video_file
+    input_srt = args.subtitle_file
+    language_code = args.language
+
     file_extension = os.path.splitext(input_video)[1].lower()
     file_root = os.path.splitext(input_video)[0]
     output_video = f"{file_root}_fixed.mkv"
     output_ass = "temp_output.ass"
     interim_video = "no_subtitles.mkv"
 
-    if len(sys.argv) == 3:
-        input_srt = sys.argv[2]
+    if input_srt:
         srt_to_ass(input_srt, output_ass)
     elif file_extension == ".mkv":
         extracted_srt = "extracted.srt"
-        extract_subtitles(input_video, extracted_srt)
+        extract_subtitle(input_video, extracted_srt, language_code)
         srt_to_ass(extracted_srt, output_ass)
         clean_up_files(extracted_srt)
     else:
@@ -132,7 +163,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     remove_existing_subtitles(input_video, interim_video)
-    add_new_subtitle(interim_video, output_ass, output_video)
+    add_new_subtitle(interim_video, output_ass, output_video, language_code)
     clean_up_files(output_ass, interim_video)
 
     print(f"Final output video saved as: {output_video}")
