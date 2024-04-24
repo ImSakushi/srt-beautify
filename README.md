@@ -50,7 +50,7 @@ This project provides an automated solution for converting SRT subtitle files in
 
 - To process an MKV video by extracting the subtitles:
   ```bash
-  python srtass.py path/to/video.mkv
+  python srtass.py path/to/video.mkv -l fra
   ```
 ### Options
 ```text
