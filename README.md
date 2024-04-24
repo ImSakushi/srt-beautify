@@ -28,8 +28,8 @@ This project provides an automated solution for converting SRT subtitle files in
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/ImSakushi/srt_beautify.git
-   cd srt_beautify
+   git clone https://github.com/ImSakushi/srt-beautify.git
+   cd srt-beautify
    ```
 
 2. **Install FFmpeg**:
