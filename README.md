@@ -8,6 +8,7 @@ This project provides an automated solution for converting SRT subtitle files in
 3. [Installation](#installation)
 4. [Usage](#usage)
    - [Command Line Script](#command-line-script)
+   - [Options](#options)
    - [Graphical Interface](#graphical-interface)
 
 ## Features
@@ -51,6 +52,12 @@ This project provides an automated solution for converting SRT subtitle files in
   ```bash
   python srtass.py path/to/video.mkv
   ```
+### Options
+```text
+-l, --language                                   Destination language
+{fre, ang, spa, ger, ita, por, rus, jpn, kor, chi, ara}
+```
+
 
 ### Graphical Interface
 
