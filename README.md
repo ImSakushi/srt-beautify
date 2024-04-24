@@ -35,6 +35,11 @@ This project provides an automated solution for converting SRT subtitle files in
 2. **Install FFmpeg**:
    - **Windows**: Download and install from [FFmpeg.org](https://ffmpeg.org/download.html), and add the `bin` folder to your PATH environment variable.
    - **Linux**: Run `sudo apt-get install ffmpeg` (for Debian-based distributions).
+   - **macOS**: Install using Homebrew by running:
+     ```bash
+     brew install ffmpeg
+     ```
+     If you don't have Homebrew installed, first install it from [brew.sh](https://brew.sh/) then run the above command.
 
 3. **Ensure Python is installed**:
    - Check with `python --version` or `python3 --version`.
