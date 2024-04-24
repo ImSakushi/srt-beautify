@@ -10,20 +10,20 @@ This project provides an automated solution for converting SRT subtitle files in
    - [Command Line Script](#command-line-script)
    - [Graphical Interface](#graphical-interface)
 
-## Features {#features}
+## Features
 
 - **SRT to ASS Conversion**: Converts SRT subtitle files into the ASS format with a predefined style.
 - **Subtitle Merging**: Adds the modified ASS subtitle track to MKV/MP4 video files, removing existing subtitle tracks.
 - **Multiple File Support**: Processes multiple video files simultaneously when using the graphical interface.
 - **Automatic Subtitle Extraction**: For MKV files, automatically extracts existing subtitles before conversion and merging.
 
-## Prerequisites {#prerequisites}
+## Prerequisites
 
 - Python 3.6 or higher
 - FFmpeg installed and accessible from your system's PATH
 - Python libraries: `tkinter` for the GUI, `subprocess` for executing system commands
 
-## Installation {#installation}
+## Installation
 
 1. **Clone the repository**:
    ```bash
@@ -38,9 +38,9 @@ This project provides an automated solution for converting SRT subtitle files in
 3. **Ensure Python is installed**:
    - Check with `python --version` or `python3 --version`.
 
-## Usage {#usage}
+## Usage
 
-### Command Line Script {#command-line-script}
+### Command Line Script
 
 - To process a video with a specific SRT file:
   ```bash
@@ -52,7 +52,7 @@ This project provides an automated solution for converting SRT subtitle files in
   python srtass.py path/to/video.mkv
   ```
 
-### Graphical Interface {#graphical-interface}
+### Graphical Interface
 
 - Launch the graphical interface:
   ```bash
@@ -60,6 +60,3 @@ This project provides an automated solution for converting SRT subtitle files in
   ```
 
 - Follow the on-screen instructions to select videos and the SRT file, then click "Process Videos" to start processing.
-```
-
-With these modifications, users can now easily navigate your README by clicking on the sections listed in the table of contents. Each link will take them directly to the corresponding section in the document.
